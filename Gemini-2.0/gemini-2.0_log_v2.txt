@@ -1,0 +1,98 @@
+============================= test session starts ==============================
+collecting ... collected 13 items
+
+main.py::test_validate_put_pet_status_codes PASSED                       [  7%]
+main.py::test_validate_post_pet_status_codes PASSED                      [ 15%]
+main.py::test_validate_get_pet_find_by_status_status_codes PASSED        [ 23%]
+main.py::test_validate_get_pet_find_by_tags_status_codes PASSED          [ 30%]
+main.py::test_validate_get_pet_by_id_status_codes SKIPPED (Failed to
+create pet after multiple retries, skipping tests that depend on pet
+creation.)                                                               [ 38%]Attempt 1 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: d6a3d9211442a467)"}
+Attempt 2 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: 56a1b1d028955fa6)"}
+Attempt 3 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: a2927065ff689968)"}
+
+Skipped: Failed to create pet after multiple retries, skipping tests that depend on pet creation.
+
+main.py::test_validate_post_pet_by_id_status_codes SKIPPED (Failed to
+create pet after multiple retries, skipping tests that depend on pet
+creation.)                                                               [ 46%]Attempt 1 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: ceb0eac75ba1b634)"}
+Attempt 2 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: f7ac89e752868a1d)"}
+Attempt 3 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: 307ef73ae4ec4a60)"}
+
+Skipped: Failed to create pet after multiple retries, skipping tests that depend on pet creation.
+
+main.py::test_validate_delete_pet_by_id_status_codes SKIPPED (Failed to
+create pet after multiple retries, skipping tests that depend on pet
+creation.)                                                               [ 53%]Attempt 1 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: 082793ec4123ddd0)"}
+Attempt 2 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: 7d5ead77b41baa12)"}
+Attempt 3 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: a40cb76477f2a061)"}
+
+Skipped: Failed to create pet after multiple retries, skipping tests that depend on pet creation.
+
+main.py::test_validate_post_pet_upload_image_status_codes SKIPPED depend
+on pet creation.)                                                        [ 61%]Attempt 1 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: dc9bd55f7a85aa69)"}
+Attempt 2 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: 4b4dfcb52ea0aa0b)"}
+Attempt 3 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: 2b67fbad6b6753e9)"}
+
+Skipped: Failed to create pet after multiple retries, skipping tests that depend on pet creation.
+
+main.py::test_create_read_update_delete_pet SKIPPED (Failed to create
+pet after multiple retries, skipping tests that depend on pet creation.) [ 69%]Attempt 1 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: 8fcd5b586bb53adf)"}
+Attempt 2 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: 445c1c2517cb4509)"}
+Attempt 3 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: 95624e1ff9a54e81)"}
+
+Skipped: Failed to create pet after multiple retries, skipping tests that depend on pet creation.
+
+main.py::test_create_pet_with_invalid_status PASSED                      [ 76%]
+main.py::test_get_pet_with_invalid_id PASSED                             [ 84%]
+main.py::test_update_pet_with_missing_required_field SKIPPED (Failed to
+create pet after multiple retries, skipping tests that depend on pet
+creation.)                                                               [ 92%]Attempt 1 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: 74fffcd6ce2ab2f0)"}
+Attempt 2 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: 879b069273c1560f)"}
+Attempt 3 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: e465c8a1f155f749)"}
+
+Skipped: Failed to create pet after multiple retries, skipping tests that depend on pet creation.
+
+main.py::test_post_pet_upload_image_with_no_file SKIPPED (Failed to
+create pet after multiple retries, skipping tests that depend on pet
+creation.)                                                               [100%]Attempt 1 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: bc3528d3e91194aa)"}
+Attempt 2 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: 8b3e2f1f0adf4726)"}
+Attempt 3 to create pet failed with status code: 500, response: {"code":500,"message":"There was an error processing your request. It has been logged (ID: f6c15bb1a13b0d4e)"}
+
+Skipped: Failed to create pet after multiple retries, skipping tests that depend on pet creation.
+
+==================================================
+			API COVERAGE REPORT				
+==================================================
+1. Среднее покрытие эндпоинтов раздела Pet: 24.0%
+2. Покрытие статус-кодов раздела Pet: 23.8%
+3. Полностью покрытые эндпоинты API: 0.0%
+4. Общее покрытие статус-кодов API: 11.1%
+
+Детали по endpoint'ам:
+PUT /pet: 1/4 (25.0%) ------> ['500'] / ['200', '400', '404', '422']
+POST /pet: 1/3 (33.3%) ------> ['500'] / ['200', '400', '422']
+GET /pet/findByStatus: 1/2 (50.0%) ------> ['400'] / ['200', '400']
+GET /pet/findByTags: 1/2 (50.0%) ------> ['400'] / ['200', '400']
+GET /pet/{petId}: 1/3 (33.3%) ------> ['400'] / ['200', '400', '404']
+POST /pet/{petId}: 0/2 (0.0%) ------> [] / ['200', '400']
+DELETE /pet/{petId}: 0/2 (0.0%) ------> [] / ['200', '400']
+POST /pet/{petId}/uploadImage: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+GET /store/inventory: 0/1 (0.0%) ------> [] / ['200']
+POST /store/order: 0/3 (0.0%) ------> [] / ['200', '400', '422']
+GET /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+POST /user: 0/1 (0.0%) ------> [] / ['200']
+POST /user/createWithList: 0/1 (0.0%) ------> [] / ['200']
+GET /user/login: 0/2 (0.0%) ------> [] / ['200', '400']
+GET /user/logout: 0/1 (0.0%) ------> [] / ['200']
+GET /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+PUT /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+
+=========================
+
+
+================== 6 passed, 7 skipped, 7 warnings in 47.19s ===================
+
+Process finished with exit code 0
