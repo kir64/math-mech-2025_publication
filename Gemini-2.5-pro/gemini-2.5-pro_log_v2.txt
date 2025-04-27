@@ -1,0 +1,300 @@
+============================= test session starts ==============================
+collecting ... collected 25 items
+
+main.py::test_create_pet_success PASSED                                  [  4%]
+main.py::test_create_pet_invalid_input_400 PASSED                        [  8%]
+main.py::test_create_pet_unprocessable_422 FAILED                        [ 12%]
+main.py:95 (test_create_pet_unprocessable_422)
+200 != 400
+
+Expected :400
+Actual   :200
+<Click to see difference>
+
+pet_data = {'category': {'id': 18, 'name': 'Dogs'}, 'id': 1745793722199, 'name': 'TestPet_1745793722199', 'photoUrls': ['http://example.com/photo_1745793722199.jpg'], ...}
+
+    def test_create_pet_unprocessable_422(pet_data):
+        """POST /pet: Проверка создания питомца с невалидным значением статуса (ожидаем 400/422/500)."""
+        headers = {'Content-Type': 'application/json', 'accept': 'application/json'}
+        invalid_data = pet_data.copy()
+        invalid_data["id"] = int(time.time() * 1000) + random.randint(2001, 3000)
+        invalid_data["status"] = "invalid-enum-status" # Недопустимое значение
+        response = requests.post(f"{BASE_URL}/pet", json=invalid_data, headers=headers)
+        coverage.record_test_result("POST /pet", response.status_code)
+        # Спецификация предполагает 422, но API может вернуть 400 или даже 500
+        # Проверяем 400, так как он чаще встречается на практике для ошибок валидации
+        # Если будет падать, можно расширить до assert response.status_code in [400, 422, 500]
+>       assert response.status_code == 400 # API Petstore возвращает 400
+E       assert 200 == 400
+E        +  where 200 = <Response [200]>.status_code
+
+main.py:107: AssertionError
+
+main.py::test_create_pet_missing_required_field PASSED                   [ 16%]
+main.py::test_update_pet_success 
+[Fixture] Created pet ID: 1745793728649
+FAILED                                  [ 20%]
+main.py:129 (test_update_pet_success)
+404 != 200
+
+Expected :200
+Actual   :404
+<Click to see difference>
+
+created_pet = 1745793728649
+
+    def test_update_pet_success(created_pet):
+        """PUT /pet: Проверка успешного обновления питомца (200)."""
+        pet_id = created_pet
+        updated_data = {
+            "id": pet_id,
+            "name": f"UpdatedPet_{pet_id}",
+            "category": {"id": 1, "name": "Dogs"},
+            "photoUrls": ["http://example.com/updated_photo.jpg"],
+            "tags": [{"id": 1, "name": "updated-tag"}],
+            "status": "pending"
+        }
+        headers = {'Content-Type': 'application/json', 'accept': 'application/json'}
+        response = requests.put(f"{BASE_URL}/pet", json=updated_data, headers=headers)
+        coverage.record_test_result("PUT /pet", response.status_code)
+>       assert response.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <Response [404]>.status_code
+
+main.py:144: AssertionError
+[Fixture] Cleaning up pet ID: 1745793728649
+[Fixture] Delete response: 200
+
+main.py::test_update_pet_not_found_404 PASSED                            [ 24%]
+main.py::test_update_pet_invalid_data_400_or_404 
+[Fixture] Created pet ID: 1745793734199
+PASSED                  [ 28%][Fixture] Cleaning up pet ID: 1745793734199
+[Fixture] Delete response: 200
+
+main.py::test_update_pet_unprocessable_422 
+[Fixture] Created pet ID: 1745793738066
+FAILED                        [ 32%]
+main.py:175 (test_update_pet_unprocessable_422)
+404 != [400, 422]
+
+Expected :[400, 422]
+Actual   :404
+<Click to see difference>
+
+created_pet = 1745793738066
+
+    def test_update_pet_unprocessable_422(created_pet):
+        """PUT /pet: Проверка обновления питомца с невалидным значением статуса (ожидаем 400/422)."""
+        pet_id = created_pet
+        invalid_update_data = {
+            "id": pet_id, "name": f"InvalidStatusUpdate_{pet_id}", "category": {"id": 1, "name": "Dogs"},
+            "photoUrls": [], "tags": [], "status": "another-invalid-status" # Недопустимое значение
+        }
+        headers = {'Content-Type': 'application/json', 'accept': 'application/json'}
+        response = requests.put(f"{BASE_URL}/pet", json=invalid_update_data, headers=headers)
+        coverage.record_test_result("PUT /pet", response.status_code)
+        # Ожидаем 400 или 422
+>       assert response.status_code in [400, 422] # Petstore API чаще возвращает 400
+E       assert 404 in [400, 422]
+E        +  where 404 = <Response [404]>.status_code
+
+main.py:187: AssertionError
+[Fixture] Cleaning up pet ID: 1745793738066
+[Fixture] Delete response: 200
+
+main.py::test_find_pets_by_status_success PASSED                         [ 36%]
+main.py::test_find_pets_by_status_invalid_400 PASSED                     [ 40%]
+main.py::test_find_pets_by_tags_success PASSED                           [ 44%]
+main.py::test_find_pets_by_tags_no_tag_400 PASSED                        [ 48%]
+main.py::test_get_pet_by_id_success 
+[Fixture] Created pet ID: 1745793749053
+FAILED                               [ 52%]
+[Test] Getting pet ID: 1745793749053
+[Test] GET response status: 404
+
+main.py:244 (test_get_pet_by_id_success)
+404 != 200
+
+Expected :200
+Actual   :404
+<Click to see difference>
+
+created_pet = 1745793749053
+
+    def test_get_pet_by_id_success(created_pet):
+        """GET /pet/{petId}: Проверка получения питомца по ID (200)."""
+        pet_id = created_pet
+        print(f"\n[Test] Getting pet ID: {pet_id}")
+        headers = {'accept': 'application/json'}
+        response = requests.get(f"{BASE_URL}/pet/{pet_id}", headers=headers)
+        print(f"[Test] GET response status: {response.status_code}")
+        coverage.record_test_result("GET /pet/{petId}", response.status_code)
+>       assert response.status_code == 200 # Ожидаем 200 после паузы в фикстуре
+E       assert 404 == 200
+E        +  where 404 = <Response [404]>.status_code
+
+main.py:253: AssertionError
+[Fixture] Cleaning up pet ID: 1745793749053
+[Fixture] Delete response: 200
+
+main.py::test_get_pet_by_id_not_found_404 PASSED                         [ 56%]
+main.py::test_get_pet_by_id_invalid_id_400 PASSED                        [ 60%]
+main.py::test_update_pet_form_data_error_400 
+[Fixture] Created pet ID: 1745793755225
+PASSED                      [ 64%][Fixture] Cleaning up pet ID: 1745793755225
+[Fixture] Delete response: 200
+
+main.py::test_delete_pet_success 
+[Fixture] Created pet ID: 1745793759619
+PASSED                                  [ 68%]
+[Test] Verifying delete for pet ID: 1745793759619
+[Test] GET after delete status: 404
+[Fixture] Cleaning up pet ID: 1745793759619
+[Fixture] Delete response: 200
+
+main.py::test_delete_pet_not_found_error_200 PASSED                      [ 72%]
+main.py::test_delete_pet_invalid_id_400 PASSED                           [ 76%]
+main.py::test_upload_image_error_415 
+[Fixture] Created pet ID: 1745793765420
+PASSED                              [ 80%][Fixture] Cleaning up pet ID: 1745793765420
+[Fixture] Delete response: 200
+
+main.py::test_upload_image_unsupported_media_type_415 
+[Fixture] Created pet ID: 1745793769115
+PASSED             [ 84%][Fixture] Cleaning up pet ID: 1745793769115
+[Fixture] Delete response: 200
+
+main.py::test_upload_image_pet_not_found_404 FAILED                      [ 88%]
+main.py:344 (test_upload_image_pet_not_found_404)
+415 != 404
+
+Expected :404
+Actual   :415
+<Click to see difference>
+
+def test_upload_image_pet_not_found_404():
+        """POST /pet/{petId}/uploadImage: Проверка загрузки для несуществующего питомца (404)."""
+        non_existent_id = random.randint(999999900, 999999999)
+        headers = {'accept': 'application/json'}
+        file_path = "ghost_image.jpg"
+        with open(file_path, "w") as f: f.write("dummy image data")
+        files = {'file': (file_path, open(file_path, 'rb'), 'image/png')} # Используем другой тип для разнообразия
+    
+        response = requests.post(f"{BASE_URL}/pet/{non_existent_id}/uploadImage", headers=headers, files=files)
+        files['file'][1].close()
+        os.remove(file_path)
+    
+        coverage.record_test_result("POST /pet/{petId}/uploadImage", response.status_code)
+>       assert response.status_code == 404 # Ожидаем Not Found
+E       assert 415 == 404
+E        +  where 415 = <Response [415]>.status_code
+
+main.py:358: AssertionError
+
+main.py::test_upload_image_invalid_petid_400 FAILED                      [ 92%]
+main.py:359 (test_upload_image_invalid_petid_400)
+415 != 400
+
+Expected :400
+Actual   :415
+<Click to see difference>
+
+def test_upload_image_invalid_petid_400():
+        """POST /pet/{petId}/uploadImage: Проверка загрузки для невалидного ID питомца (400)."""
+        invalid_id = "invalid-pet-id"
+        headers = {'accept': 'application/json'}
+        file_path = "invalid_id_image.jpg"
+        with open(file_path, "w") as f: f.write("dummy image data")
+        files = {'file': (file_path, open(file_path, 'rb'), 'image/gif')}
+    
+        response = requests.post(f"{BASE_URL}/pet/{invalid_id}/uploadImage", headers=headers, files=files)
+        files['file'][1].close()
+        os.remove(file_path)
+    
+        coverage.record_test_result("POST /pet/{petId}/uploadImage", response.status_code)
+        # Ожидаем Bad Request из-за невалидного формата ID в пути
+>       assert response.status_code == 400
+E       assert 415 == 400
+E        +  where 415 = <Response [415]>.status_code
+
+main.py:374: AssertionError
+
+main.py::test_pet_crud_e2e FAILED                                        [ 96%]
+E2E: Создан питомец с ID 1745793780522
+
+main.py:378 (test_pet_crud_e2e)
+404 != 200
+
+Expected :200
+Actual   :404
+<Click to see difference>
+
+pet_data = {'category': {'id': 18, 'name': 'Dogs'}, 'id': 1745793722199, 'name': 'TestPet_1745793722199', 'photoUrls': ['http://example.com/photo_1745793722199.jpg'], ...}
+
+    def test_pet_crud_e2e(pet_data):
+        """Полный цикл CRUD операций для питомца."""
+        headers_json = {'Content-Type': 'application/json', 'accept': 'application/json'}
+        headers_accept = {'accept': 'application/json'}
+    
+        # Используем копию с уникальным ID
+        e2e_pet_data = pet_data.copy()
+        e2e_pet_data["id"] = int(time.time() * 1000) + random.randint(5001, 6000)
+        created_pet_id = e2e_pet_data["id"] # Запомним ID
+    
+        # 1. Создание (POST /pet)
+        create_response = requests.post(f"{BASE_URL}/pet", json=e2e_pet_data, headers=headers_json)
+        coverage.record_test_result("POST /pet", create_response.status_code)
+        assert create_response.status_code == 200, f"E2E Ошибка создания: {create_response.text}"
+        # ID может измениться при создании, берем из ответа
+        created_pet_id = create_response.json().get("id", created_pet_id)
+        print(f"\nE2E: Создан питомец с ID {created_pet_id}")
+        time.sleep(0.7) # <<<--- Увеличена пауза для E2E
+    
+        # 2. Чтение (GET /pet/{petId})
+        get_response = requests.get(f"{BASE_URL}/pet/{created_pet_id}", headers=headers_accept)
+        coverage.record_test_result("GET /pet/{petId}", get_response.status_code)
+        # Исправлено: Добавлена пауза выше
+>       assert get_response.status_code == 200, f"E2E Ошибка чтения после создания: {get_response.status_code} {get_response.text}"
+E       AssertionError: E2E Ошибка чтения после создания: 404 Pet not found
+E       assert 404 == 200
+E        +  where 404 = <Response [404]>.status_code
+
+main.py:402: AssertionError
+
+main.py::test_get_pet_by_status_long_string PASSED                       [100%]
+==================================================
+                API COVERAGE REPORT                 
+==================================================
+
+1. Среднее покрытие эндпоинтов раздела Pet: 67.7%
+2. Покрытие статус-кодов раздела Pet: 61.9%
+3. Полностью покрытые эндпоинты API: 15.8%
+4. Общее покрытие статус-кодов API: 28.9%
+
+Детали по endpoint'ам:
+DELETE /pet/{petId}: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+DELETE /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+GET /pet/findByStatus: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+GET /pet/findByTags: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+GET /pet/{petId}: 2/3 (66.7%) ------> ['400', '404'] / ['200', '400', '404']
+GET /store/inventory: 0/1 (0.0%) ------> [] / ['200']
+GET /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+GET /user/login: 0/2 (0.0%) ------> [] / ['200', '400']
+GET /user/logout: 0/1 (0.0%) ------> [] / ['200']
+GET /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+POST /pet: 2/3 (66.7%) ------> ['200', '400'] / ['200', '400', '422']
+POST /pet/{petId}: 1/2 (50.0%) ------> ['400'] / ['200', '400']
+POST /pet/{petId}/uploadImage: 1/3 (33.3%) ------> ['415'] / ['200', '400', '404']
+POST /store/order: 0/3 (0.0%) ------> [] / ['200', '400', '422']
+POST /user: 0/1 (0.0%) ------> [] / ['200']
+POST /user/createWithList: 0/1 (0.0%) ------> [] / ['200']
+PUT /pet: 1/4 (25.0%) ------> ['404'] / ['200', '400', '404', '422']
+PUT /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+
+=========================
+
+
+======================== 7 failed, 18 passed in 56.39s =========================
+
+Process finished with exit code 1
