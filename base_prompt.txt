@@ -1,0 +1,159 @@
+Дано:
+1) API - https://petstore3.swagger.io/#/
+2) openapi.json этого API с описанием эндпоинтов и статус-кодов - https://petstore3.swagger.io/api/v3/openapi.json
+Цель:
+Написать автоматизированные проверки на Python с использованием библиотеки pytest (файл main.py), обеспечив максимальное покрытие тестами раздела Pet из рассматриваемого API.
+Задачи:
+- провалидировать эндпоинты по имеющейся документации (получить для каждого все описанные в openapi.json статус-коды)
+- провести один end-to-end кейс с использованием CRUD-операций раздела Pet (если есть несколько запросов одинакового типа, то последовательно вызвать каждый)
+- добавить несколько тестов на негативные проверки (невалидные данные в body/header и т.д.)
+- общее количество проверок должно быть не меньше 10
+- обеспечить интеграцию создаваемого файла main.py (генерируемый) и готового файла metrcis.py (задан ниже) для анализа покрытия API сгенерированными тестами. Результаты метрик должны выводиться после выполнения тестов в консоль в том же порядке, что в документации (сначала раздел Pet, затем все остальные).
+
+Пример вывода метрик после выполнения тестов:
+==================================================
+               API COVERAGE REPORT                
+==================================================
+
+1. Среднее покрытие эндпоинтов раздела Pet: 39.8%
+2. Покрытие статус-кодов раздела Pet: 41.4%
+3. Полностью покрытые эндпоинты API: 0.0%
+4. Общее покрытие статус-кодов API: 18.8%
+
+Детали по endpoint'ам:
+PUT /pet: 3/5 (60.0%) ------> ['200', '500', '404'] / ['200', '400', '404', '422', 'default']
+POST /pet: 2/4 (50.0%) ------> ['200', '500'] / ['200', '400', '422', 'default']
+GET /pet/findByStatus: 1/3 (33.3%) ------> ['200'] / ['200', '400', 'default']
+GET /pet/findByTags: 1/3 (33.3%) ------> ['200'] / ['200', '400', 'default']
+GET /pet/{petId}: 2/4 (50.0%) ------> ['200', '404'] / ['200', '400', '404', 'default']
+POST /pet/{petId}: 1/3 (33.3%) ------> ['400'] / ['200', '400', 'default']
+DELETE /pet/{petId}: 1/3 (33.3%) ------> ['200'] / ['200', '400', 'default']
+POST /pet/{petId}/uploadImage: 1/4 (25.0%) ------> ['415'] / ['200', '400', '404', 'default']
+GET /store/inventory: 0/2 (0.0%) ------> [] / ['200', 'default']
+POST /store/order: 0/4 (0.0%) ------> [] / ['200', '400', '422', 'default']
+GET /store/order/{orderId}: 0/4 (0.0%) ------> [] / ['200', '400', '404', 'default']
+DELETE /store/order/{orderId}: 0/4 (0.0%) ------> [] / ['200', '400', '404', 'default']
+POST /user: 0/2 (0.0%) ------> [] / ['200', 'default']
+POST /user/createWithList: 0/2 (0.0%) ------> [] / ['200', 'default']
+GET /user/login: 0/3 (0.0%) ------> [] / ['200', '400', 'default']
+GET /user/logout: 0/2 (0.0%) ------> [] / ['200', 'default']
+GET /user/{username}: 0/4 (0.0%) ------> [] / ['200', '400', '404', 'default']
+PUT /user/{username}: 0/4 (0.0%) ------> [] / ['200', '400', '404', 'default']
+DELETE /user/{username}: 0/4 (0.0%) ------> [] / ['200', '400', '404', 'default']
+
+
+=========================
+1 failed, 12 passed in 21.49s
+=========================
+
+Содержимое файла metrics.py:
+import requests
+from collections import defaultdict
+
+
+class CoverageMetrics:
+    def __init__(self):
+        # Инициализация структуры для хранения данных о покрытии
+        self.coverage_data = defaultdict(lambda: {
+            "status_codes": [],
+            "tested": []
+        })
+
+        # Загружаем спецификацию API
+        self._load_api_specification()
+
+    def _load_api_specification(self):
+        """Загружает спецификацию API и инициализирует ожидаемые статус-коды"""
+        try:
+            api_spec = requests.get("https://petstore3.swagger.io/api/v3/openapi.json").json()
+            paths = api_spec.get("paths", {})
+
+            for endpoint, methods in paths.items():
+                for method, details in methods.items():
+                    if method.lower() in ['get', 'post', 'put', 'delete', 'patch']:
+                        key = f"{method.upper()} {endpoint}"
+                        responses = details.get("responses", {})
+                        self.coverage_data[key]["status_codes"] = [str(code) for code in responses.keys() if code != 'default']
+        except Exception as e:
+            print(f"Warning: Could not load API spec - {str(e)}")
+            # Fallback к базовым значениям если не удалось загрузить спецификацию
+            self._initialize_default_coverage()
+
+    def _initialize_default_coverage(self):
+        """Инициализирует значения по умолчанию"""
+        self.coverage_data = {
+            "POST /pet": {"status_codes": ["200", "405"], "tested": []},
+            "PUT /pet": {"status_codes": ["200", "400", "404", "405"], "tested": []},
+            "GET /pet/findByStatus": {"status_codes": ["200", "400"], "tested": []},
+            "GET /pet/findByTags": {"status_codes": ["200", "400"], "tested": []},
+            "GET /pet/{petId}": {"status_codes": ["200", "400", "404"], "tested": []},
+            "POST /pet/{petId}": {"status_codes": ["405"], "tested": []},
+            "DELETE /pet/{petId}": {"status_codes": ["200", "400", "404"], "tested": []},
+            "POST /pet/{petId}/uploadImage": {"status_codes": ["200"], "tested": []}
+        }
+
+    def record_test_result(self, endpoint: str, status_code: int):
+        """Записывает результат теста"""
+        status_str = str(status_code)
+        if endpoint in self.coverage_data:
+            if status_str not in self.coverage_data[endpoint]["tested"]:
+                self.coverage_data[endpoint]["tested"].append(status_str)
+
+    def calculate_metrics(self):
+        metrics = {
+            "avg_endpoint_coverage": 0.0,
+            "pet_status_coverage": 0.0,
+            "total_api_coverage": 0.0,
+            "full_endpoint_coverage": 0.0
+        }
+
+        if not self.coverage_data:
+            return metrics
+
+        pet_data = {
+            "count": 0,
+            "ratio_sum": 0.0,
+            "tested": 0,
+            "expected": 0
+        }
+
+        all_data = {
+            "tested": 0,
+            "expected": 0,
+            "fully_tested": 0
+        }
+
+        for endpoint, data in self.coverage_data.items():
+            expected = len(data["status_codes"])
+            tested = len(data["tested"])
+            ratio = tested / expected if expected > 0 else 0.0
+
+            # Общие данные
+            all_data["tested"] += tested
+            all_data["expected"] += expected
+            if tested == expected and expected > 0:
+                all_data["fully_tested"] += 1
+
+            # Данные по Pet
+            if "pet" in endpoint.lower():
+                pet_data["count"] += 1
+                pet_data["ratio_sum"] += ratio
+                pet_data["tested"] += tested
+                pet_data["expected"] += expected
+
+        # Расчет метрик
+        if pet_data["count"] > 0:
+            metrics["avg_endpoint_coverage"] = (pet_data["ratio_sum"] / pet_data["count"]) * 100
+            metrics["pet_status_coverage"] = (pet_data["tested"] / pet_data["expected"]) * 100
+
+        if all_data["expected"] > 0:
+            metrics["total_api_coverage"] = (all_data["tested"] / all_data["expected"]) * 100
+
+        metrics["full_endpoint_coverage"] = (all_data["fully_tested"] / len(self.coverage_data)) * 100
+
+        return metrics
+
+
+# Глобальный экземпляр для использования в тестах
+coverage = CoverageMetrics()
+
