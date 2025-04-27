@@ -1,0 +1,191 @@
+============================= test session starts ==============================
+collecting ... collected 24 items
+
+main.py::test_pet_crud_e2e PASSED                                        [  4%]
+main.py::test_post_pet_valid PASSED                                      [  8%]
+main.py::test_post_pet_invalid PASSED                                    [ 12%]
+main.py::test_post_pet_unprocessable FAILED                              [ 16%]
+main.py:77 (test_post_pet_unprocessable)
+200 != 422
+
+Expected :422
+Actual   :200
+<Click to see difference>
+
+def test_post_pet_unprocessable():
+        unprocessable_data = {"id": 9999}  # Missing required fields
+        response = requests.post(f"{BASE_URL}{PET_ENDPOINT}", json=unprocessable_data)
+>       assert response.status_code == 422
+E       assert 200 == 422
+E        +  where 200 = <Response [200]>.status_code
+
+main.py:81: AssertionError
+
+main.py::test_put_pet_valid FAILED                                       [ 20%]
+main.py:85 (test_put_pet_valid)
+404 != 200
+
+Expected :200
+Actual   :404
+<Click to see difference>
+
+pet_data = {'category': {'id': 1, 'name': 'Dogs'}, 'id': 9999, 'name': 'TestPet', 'photoUrls': ['string'], ...}
+
+    def test_put_pet_valid(pet_data):
+        response = requests.post(f"{BASE_URL}{PET_ENDPOINT}", json=pet_data)
+        response = requests.put(f"{BASE_URL}{PET_ENDPOINT}", json=pet_data)
+>       assert response.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <Response [404]>.status_code
+
+main.py:89: AssertionError
+
+main.py::test_put_pet_invalid_body PASSED                                [ 25%]
+main.py::test_put_pet_not_found PASSED                                   [ 29%]
+main.py::test_put_pet_unprocessable FAILED                               [ 33%]
+main.py:105 (test_put_pet_unprocessable)
+404 != 422
+
+Expected :422
+Actual   :404
+<Click to see difference>
+
+def test_put_pet_unprocessable():
+        unprocessable_data = {"id": 9999}  # Missing required fields
+        response = requests.put(f"{BASE_URL}{PET_ENDPOINT}", json=unprocessable_data)
+>       assert response.status_code == 422
+E       assert 404 == 422
+E        +  where 404 = <Response [404]>.status_code
+
+main.py:109: AssertionError
+
+main.py::test_get_pet_by_id PASSED                                       [ 37%]
+main.py::test_get_pet_not_found PASSED                                   [ 41%]
+main.py::test_get_pet_invalid_id PASSED                                  [ 45%]
+main.py::test_find_by_status_valid PASSED                                [ 50%]
+main.py::test_find_by_status_invalid PASSED                              [ 54%]
+main.py::test_find_by_tags_valid PASSED                                  [ 58%]
+main.py::test_find_by_tags_invalid PASSED                                [ 62%]
+main.py::test_delete_pet PASSED                                          [ 66%]
+main.py::test_delete_pet_invalid_id PASSED                               [ 70%]
+main.py::test_post_pet_id_valid FAILED                                   [ 75%]
+main.py:174 (test_post_pet_id_valid)
+400 != 200
+
+Expected :200
+Actual   :400
+<Click to see difference>
+
+pet_data = {'category': {'id': 1, 'name': 'Dogs'}, 'id': 9999, 'name': 'TestPet', 'photoUrls': ['string'], ...}
+
+    def test_post_pet_id_valid(pet_data):
+        response = requests.post(f"{BASE_URL}{PET_ENDPOINT}", json=pet_data)
+        response = requests.post(
+            f"{BASE_URL}{PET_ID_ENDPOINT.format(petId=pet_data['id'])}",
+            data={"name": "UpdatedName", "status": "sold"}
+        )
+>       assert response.status_code == 200
+E       assert 400 == 200
+E        +  where 400 = <Response [400]>.status_code
+
+main.py:181: AssertionError
+
+main.py::test_post_pet_id_invalid PASSED                                 [ 79%]
+main.py::test_upload_image_valid FAILED                                  [ 83%]
+main.py:194 (test_upload_image_valid)
+415 != 200
+
+Expected :200
+Actual   :415
+<Click to see difference>
+
+pet_data = {'category': {'id': 1, 'name': 'Dogs'}, 'id': 9999, 'name': 'TestPet', 'photoUrls': ['string'], ...}
+
+    def test_upload_image_valid(pet_data):
+        response = requests.post(f"{BASE_URL}{PET_ENDPOINT}", json=pet_data)
+        response = requests.post(
+            f"{BASE_URL}{UPLOAD_IMAGE_ENDPOINT.format(petId=pet_data['id'])}",
+            files={'file': ('test.jpg', b'fake_image_data', 'image/jpeg')}
+        )
+>       assert response.status_code == 200
+E       assert 415 == 200
+E        +  where 415 = <Response [415]>.status_code
+
+main.py:201: AssertionError
+
+main.py::test_upload_image_invalid PASSED                                [ 87%]
+main.py::test_upload_image_not_found FAILED                              [ 91%]
+main.py:213 (test_upload_image_not_found)
+415 != 404
+
+Expected :404
+Actual   :415
+<Click to see difference>
+
+def test_upload_image_not_found():
+        response = requests.post(
+            f"{BASE_URL}{UPLOAD_IMAGE_ENDPOINT.format(petId=999999)}",
+            files={'file': ('test.jpg', b'fake_image_data', 'image/jpeg')}
+        )
+>       assert response.status_code == 404
+E       assert 415 == 404
+E        +  where 415 = <Response [415]>.status_code
+
+main.py:219: AssertionError
+
+main.py::test_upload_image_invalid_data FAILED                           [ 95%]
+main.py:222 (test_upload_image_invalid_data)
+500 != 400
+
+Expected :400
+Actual   :500
+<Click to see difference>
+
+def test_upload_image_invalid_data():
+        response = requests.post(
+            f"{BASE_URL}{UPLOAD_IMAGE_ENDPOINT.format(petId=9999)}",
+            data="invalid_data"
+        )
+>       assert response.status_code == 400
+E       assert 500 == 400
+E        +  where 500 = <Response [500]>.status_code
+
+main.py:228: AssertionError
+
+main.py::test_post_pet_missing_headers PASSED                            [100%]
+==================================================
+                API COVERAGE REPORT                 
+==================================================
+
+1. Среднее покрытие эндпоинтов раздела Pet: 82.3%
+2. Покрытие статус-кодов раздела Pet: 81.0%
+3. Полностью покрытые эндпоинты API: 26.3%
+4. Общее покрытие статус-кодов API: 37.8%
+
+Детали по endpoint'ам:
+DELETE /pet/{petId}: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+DELETE /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+GET /pet/findByStatus: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+GET /pet/findByTags: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+GET /pet/{petId}: 3/3 (100.0%) ------> ['200', '400', '404'] / ['200', '400', '404']
+GET /store/inventory: 0/1 (0.0%) ------> [] / ['200']
+GET /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+GET /user/login: 0/2 (0.0%) ------> [] / ['200', '400']
+GET /user/logout: 0/1 (0.0%) ------> [] / ['200']
+GET /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+POST /pet: 3/3 (100.0%) ------> ['200', '400', '500'] / ['200', '400', '422']
+POST /pet/{petId}: 1/2 (50.0%) ------> ['400'] / ['200', '400']
+POST /pet/{petId}/uploadImage: 1/3 (33.3%) ------> ['415'] / ['200', '400', '404']
+POST /store/order: 0/3 (0.0%) ------> [] / ['200', '400', '422']
+POST /user: 0/1 (0.0%) ------> [] / ['200']
+POST /user/createWithList: 0/1 (0.0%) ------> [] / ['200']
+PUT /pet: 3/4 (75.0%) ------> ['200', '400', '404'] / ['200', '400', '404', '422']
+PUT /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+
+=========================
+
+
+======================== 7 failed, 17 passed in 34.95s =========================
+
+Process finished with exit code 1
