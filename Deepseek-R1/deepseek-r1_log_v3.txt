@@ -1,0 +1,108 @@
+============================= test session starts ==============================
+collecting ... collected 13 items
+
+main.py::test_post_pet_success FAILED                                    [  7%]
+main.py:43 (test_post_pet_success)
+500 != [200, 201]
+
+Expected :[200, 201]
+Actual   :500
+<Click to see difference>
+
+def test_post_pet_success():
+        pet_data = {
+            "name": "NewPet",
+            "photoUrls": ["https://example.com/photo.jpg"]
+        }
+        response = requests.post(f"{BASE_URL}/pet", json=pet_data)
+>       assert response.status_code in [200, 201], f"Unexpected status {response.status_code}"
+E       AssertionError: Unexpected status 500
+E       assert 500 in [200, 201]
+E        +  where 500 = <Response [500]>.status_code
+
+main.py:50: AssertionError
+
+main.py::test_post_pet_invalid_data PASSED                               [ 15%]
+main.py::test_put_pet_success FAILED                                     [ 23%]
+main.py:61 (test_put_pet_success)
+404 != [200, 204]
+
+Expected :[200, 204]
+Actual   :404
+<Click to see difference>
+
+test_pet = 1745799730
+
+    def test_put_pet_success(test_pet):
+        update_data = {
+            "id": test_pet,
+            "name": "UpdatedPet",
+            "status": "sold",
+            "photoUrls": ["https://new-url.com/photo.jpg"]
+        }
+        response = requests.put(f"{BASE_URL}/pet", json=update_data)
+>       assert response.status_code in [200, 204], "Update failed"
+E       AssertionError: Update failed
+E       assert 404 in [200, 204]
+E        +  where 404 = <Response [404]>.status_code
+
+main.py:70: AssertionError
+
+main.py::test_put_pet_not_found PASSED                                   [ 30%]
+main.py::test_get_pet_success PASSED                                     [ 38%]
+main.py::test_get_pet_invalid_id PASSED                                  [ 46%]
+main.py::test_delete_pet_success PASSED                                  [ 53%]
+main.py::test_find_by_status[available] 
+main.py::test_find_by_status[pending] 
+main.py::test_find_by_status[sold] 
+main.py::test_find_by_status[invalid] 
+main.py::test_upload_image_success PASSED                           [ 61%]PASSED                             [ 69%]PASSED                                [ 76%]PASSED                             [ 84%]FAILED                                [ 92%]
+main.py:121 (test_upload_image_success)
+415 != [200, 201]
+
+Expected :[200, 201]
+Actual   :415
+<Click to see difference>
+
+test_pet = 1745799755
+
+    def test_upload_image_success(test_pet):
+        files = {'file': ('image.jpg', b'content', 'image/jpeg')}
+        response = requests.post(
+            f"{BASE_URL}/pet/{test_pet}/uploadImage",
+            files=files,
+            headers={"Content-Type": "multipart/form-data"}
+        )
+>       assert response.status_code in [200, 201], "Image upload failed"
+E       AssertionError: Image upload failed
+E       assert 415 in [200, 201]
+E        +  where 415 = <Response [415]>.status_code
+
+main.py:129: AssertionError
+
+main.py::test_full_lifecycle FAILED                                      [100%]
+main.py:133 (test_full_lifecycle)
+500 != [200, 201]
+
+Expected :[200, 201]
+Actual   :500
+<Click to see difference>
+
+def test_full_lifecycle():
+        # Создание
+        pet_data = {
+            "name": "LifecyclePet",
+            "photoUrls": ["https://lifecycle.com/photo.jpg"],
+            "status": "available"
+        }
+        create_resp = requests.post(f"{BASE_URL}/pet", json=pet_data)
+>       assert create_resp.status_code in [200, 201]
+E       assert 500 in [200, 201]
+E        +  where 500 = <Response [500]>.status_code
+
+main.py:142: AssertionError
+
+
+========================= 4 failed, 9 passed in 38.97s =========================
+
+Process finished with exit code 1
