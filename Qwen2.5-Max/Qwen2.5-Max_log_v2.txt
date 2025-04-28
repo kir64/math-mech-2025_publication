@@ -1,0 +1,77 @@
+============================= test session starts ==============================
+collecting ... collected 13 items
+
+main.py::test_update_pet PASSED                                          [  7%]
+main.py::test_create_pet PASSED                                          [ 15%]
+main.py::test_find_pets_by_status PASSED                                 [ 23%]
+main.py::test_find_pets_by_tags PASSED                                   [ 30%]
+main.py::test_get_pet_by_id PASSED                                       [ 38%]
+main.py::test_update_pet_with_form PASSED                                [ 46%]
+main.py::test_delete_pet PASSED                                          [ 53%]
+main.py::test_upload_pet_image FAILED                                    [ 61%]
+main.py:66 (test_upload_pet_image)
+@pytest.mark.pet
+    def test_upload_pet_image():
+        """POST /pet/{petId}/uploadImage: Загрузка изображения питомца"""
+        pet_id = 1
+>       files = {"file": ("test.jpg", open("test.jpg", "rb"), "image/jpeg")}
+E       FileNotFoundError: [Errno 2] No such file or directory: 'test.jpg'
+
+main.py:71: FileNotFoundError
+
+main.py::test_end_to_end_pet_crud FAILED                                 [ 69%]
+main.py:74 (test_end_to_end_pet_crud)
+404 != 200
+
+Expected :200
+Actual   :404
+<Click to see difference>
+
+@pytest.mark.pet
+    def test_end_to_end_pet_crud():
+        """End-to-end сценарий CRUD для питомца"""
+        # Создание питомца
+        pet_data = {
+            "id": 3,
+            "name": "CRUDPet",
+            "status": "available"
+        }
+        create_response = make_request("POST", "/pet", 200, json=pet_data)
+        pet_id = create_response.json()["id"]
+    
+        # Получение питомца
+        make_request("GET", f"/pet/{pet_id}", 200)
+    
+        # Обновление питомца
+        updated_data = {
+            "id": pet_id,
+            "name": "UpdatedCRUDPet",
+            "status": "sold"
+        }
+>       make_request("PUT", "/pet", 200, json=updated_data)
+
+main.py:96:
+
+main.py::test_invalid_pet_id PASSED                                      [ 76%]
+main.py::test_invalid_pet_data PASSED                                    [ 84%]
+main.py::test_invalid_status_for_find_by_status PASSED                   [ 92%]
+main.py::test_invalid_tags_for_find_by_tags FAILED                       [100%]
+main.py:123 (test_invalid_tags_for_find_by_tags)
+200 != 400
+
+Expected :400
+Actual   :200
+<Click to see difference>
+
+@pytest.mark.pet
+    def test_invalid_tags_for_find_by_tags():
+        """GET /pet/findByTags: Негативный тест с невалидными тегами"""
+        params = {"tags": "invalid_tag"}
+>       make_request("GET", "/pet/findByTags", 400, params=params)
+
+main.py:128:
+
+
+================== 3 failed, 10 passed, 13 warnings in 16.84s ==================
+
+Process finished with exit code 1
