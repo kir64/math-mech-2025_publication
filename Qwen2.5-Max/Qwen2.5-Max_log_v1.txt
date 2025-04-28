@@ -1,0 +1,44 @@
+============================= test session starts ==============================
+collecting ... collected 11 items
+
+main.py::test_update_pet PASSED                                          [  9%]
+main.py::test_create_pet PASSED                                          [ 18%]
+main.py::test_find_pets_by_status PASSED                                 [ 27%]
+main.py::test_find_pets_by_tags PASSED                                   [ 36%]
+main.py::test_get_pet_by_id PASSED                                       [ 45%]
+main.py::test_update_pet_with_form FAILED                                [ 54%]
+main.py:53 (test_update_pet_with_form)
+400 != 405
+
+Expected :405
+Actual   :400
+<Click to see difference>
+
+@pytest.mark.pet
+    def test_update_pet_with_form():
+        """POST /pet/{petId}: Обновление питомца через форму"""
+        pet_id = 1
+        data = {"name": "FormUpdatedPet", "status": "sold"}
+>       make_request("POST", f"/pet/{pet_id}", 405, data=data)
+
+main.py:59:
+
+main.py::test_delete_pet PASSED                                          [ 63%]
+main.py::test_upload_pet_image FAILED                                    [ 72%]
+main.py:66 (test_upload_pet_image)
+@pytest.mark.pet
+    def test_upload_pet_image():
+        """POST /pet/{petId}/uploadImage: Загрузка изображения питомца"""
+        pet_id = 1
+>       files = {"file": ("test.jpg", open("test.jpg", "rb"), "image/jpeg")}
+E       FileNotFoundError: [Errno 2] No such file or directory: 'test.jpg'
+
+main.py:71: FileNotFoundError
+
+main.py::test_end_to_end_pet_crud PASSED                                 [ 81%]
+main.py::test_invalid_pet_id PASSED                                      [ 90%]
+main.py::test_invalid_pet_data PASSED                                    [100%]
+
+================== 2 failed, 9 passed, 11 warnings in 16.37s ===================
+
+Process finished with exit code 1
