@@ -1,0 +1,187 @@
+============================= test session starts ==============================
+collecting ... collected 8 items
+
+main.py::test_post_pet_minimal FAILED                                    [ 12%]
+main.py:47 (test_post_pet_minimal)
+500 != [200, 201]
+
+Expected :[200, 201]
+Actual   :500
+<Click to see difference>
+
+def test_post_pet_minimal():
+        """Создание с минимальными обязательными полями"""
+        pet_data = {
+            "name": "MinimalPet",
+            "photoUrls": ["https://example.com/photo.jpg"],
+            "status": "available"
+        }
+        response = requests.post(f"{BASE_URL}/pet", json=pet_data)
+>       assert response.status_code in [200, 201], f"Фактический код: {response.status_code}"
+E       AssertionError: Фактический код: 500
+E       assert 500 in [200, 201]
+E        +  where 500 = <Response [500]>.status_code
+
+main.py:56: AssertionError
+
+main.py::test_put_pet_full_update ERROR                                  [ 25%]
+test setup failed
+@pytest.fixture
+    def test_pet():
+>       pet_id = create_pet_safe()
+
+main.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def create_pet_safe():
+        """Создание питомца с полным набором обязательных полей"""
+        pet_data = {
+            "name": f"TestPet_{int(time.time())}",
+            "photoUrls": ["https://example.com/photo.jpg"],
+            "status": "available",
+            "category": {"id": 1, "name": "Dogs"},
+            "tags": [{"id": 1, "name": "test"}]
+        }
+    
+        for _ in range(MAX_RETRIES):
+            try:
+                response = requests.post(
+                    f"{BASE_URL}/pet",
+                    json=pet_data,
+                    timeout=5
+                )
+                if response.status_code == 200:
+                    return response.json()["id"]
+            except requests.exceptions.RequestException:
+                pass
+            time.sleep(RETRY_DELAY)
+>       pytest.fail("Не удалось создать тестового питомца")
+E       Failed: Не удалось создать тестового питомца
+
+main.py:33: Failed
+
+main.py::test_get_pet_exists ERROR                                       [ 37%]
+test setup failed
+@pytest.fixture
+    def test_pet():
+>       pet_id = create_pet_safe()
+
+main.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def create_pet_safe():
+        """Создание питомца с полным набором обязательных полей"""
+        pet_data = {
+            "name": f"TestPet_{int(time.time())}",
+            "photoUrls": ["https://example.com/photo.jpg"],
+            "status": "available",
+            "category": {"id": 1, "name": "Dogs"},
+            "tags": [{"id": 1, "name": "test"}]
+        }
+    
+        for _ in range(MAX_RETRIES):
+            try:
+                response = requests.post(
+                    f"{BASE_URL}/pet",
+                    json=pet_data,
+                    timeout=5
+                )
+                if response.status_code == 200:
+                    return response.json()["id"]
+            except requests.exceptions.RequestException:
+                pass
+            time.sleep(RETRY_DELAY)
+>       pytest.fail("Не удалось создать тестового питомца")
+E       Failed: Не удалось создать тестового питомца
+
+main.py:33: Failed
+
+main.py::test_delete_pet_with_confirmation ERROR                         [ 50%]
+test setup failed
+@pytest.fixture
+    def test_pet():
+>       pet_id = create_pet_safe()
+
+main.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def create_pet_safe():
+        """Создание питомца с полным набором обязательных полей"""
+        pet_data = {
+            "name": f"TestPet_{int(time.time())}",
+            "photoUrls": ["https://example.com/photo.jpg"],
+            "status": "available",
+            "category": {"id": 1, "name": "Dogs"},
+            "tags": [{"id": 1, "name": "test"}]
+        }
+    
+        for _ in range(MAX_RETRIES):
+            try:
+                response = requests.post(
+                    f"{BASE_URL}/pet",
+                    json=pet_data,
+                    timeout=5
+                )
+                if response.status_code == 200:
+                    return response.json()["id"]
+            except requests.exceptions.RequestException:
+                pass
+            time.sleep(RETRY_DELAY)
+>       pytest.fail("Не удалось создать тестового питомца")
+E       Failed: Не удалось создать тестового питомца
+
+main.py:33: Failed
+
+main.py::test_find_by_status_valid[available] 
+main.py::test_find_by_status_valid[pending] 
+main.py::test_find_by_status_valid[sold] 
+main.py::test_upload_image_valid PASSED                     [ 62%]PASSED                       [ 75%]PASSED                          [ 87%]ERROR                                   [100%]
+test setup failed
+@pytest.fixture
+    def test_pet():
+>       pet_id = create_pet_safe()
+
+main.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def create_pet_safe():
+        """Создание питомца с полным набором обязательных полей"""
+        pet_data = {
+            "name": f"TestPet_{int(time.time())}",
+            "photoUrls": ["https://example.com/photo.jpg"],
+            "status": "available",
+            "category": {"id": 1, "name": "Dogs"},
+            "tags": [{"id": 1, "name": "test"}]
+        }
+    
+        for _ in range(MAX_RETRIES):
+            try:
+                response = requests.post(
+                    f"{BASE_URL}/pet",
+                    json=pet_data,
+                    timeout=5
+                )
+                if response.status_code == 200:
+                    return response.json()["id"]
+            except requests.exceptions.RequestException:
+                pass
+            time.sleep(RETRY_DELAY)
+>       pytest.fail("Не удалось создать тестового питомца")
+E       Failed: Не удалось создать тестового питомца
+
+main.py:33: Failed
+
+==================================================
+               API COVERAGE REPORT                
+==================================================
+
+1. Среднее покрытие эндпоинтов раздела Pet: 6.2%
+2. Покрытие статус-кодов раздела Pet: 4.8%
+3. Полностью покрытые эндпоинты API: 0.0%
+4. Общее покрытие статус-кодов API: 2.2%
+
+
+
+==================== 1 failed, 3 passed, 4 errors in 31.88s ====================
+
+Process finished with exit code 1
