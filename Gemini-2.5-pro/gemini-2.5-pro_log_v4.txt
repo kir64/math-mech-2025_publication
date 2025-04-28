@@ -1,0 +1,218 @@
+============================= test session starts ==============================
+collecting ... collected 25 items
+
+main.py::test_create_pet_success PASSED                                  [  4%]
+main.py::test_create_pet_invalid_input_400 PASSED                        [  8%]
+main.py::test_create_pet_unprocessable_actual_200 PASSED                 [ 12%]
+main.py::test_create_pet_missing_required_field_actual_200 PASSED        [ 16%]
+main.py::test_update_pet_success 
+[Fixture] Created pet ID: 1745878720895
+[Fixture] Waiting 2.5s for consistency...
+[Fixture] Wait finished.
+PASSED                                  [ 20%]
+[Test] Updating pet ID: 1745878720895
+[Test] PUT response status: 200
+[Fixture] Cleaning up pet ID: 1745878720895
+[Fixture] Delete response: 200
+
+main.py::test_update_pet_not_found_404 PASSED                            [ 24%]
+main.py::test_update_pet_invalid_data_400_or_404 
+[Fixture] Created pet ID: 1745878730458
+[Fixture] Waiting 2.5s for consistency...
+[Fixture] Wait finished.
+SKIPPED (Skipping PUT
+invalid test: Pet 1745878730458 not found (status N/A) before update.)   [ 28%]
+Skipped: Skipping PUT invalid test: Pet 1745878730458 not found (status N/A) before update.
+[Fixture] Cleaning up pet ID: 1745878730458
+[Fixture] Unexpected status N/A getting pet 1745878730458 before cleanup.
+
+main.py::test_update_pet_unprocessable_actual_200 
+[Fixture] Created pet ID: 1745878735270
+[Fixture] Waiting 2.5s for consistency...
+[Fixture] Wait finished.
+PASSED                 [ 32%][Fixture] Cleaning up pet ID: 1745878735270
+[Fixture] Unexpected status N/A getting pet 1745878735270 before cleanup.
+
+main.py::test_find_pets_by_status_success PASSED                         [ 36%]
+main.py::test_find_pets_by_status_invalid_400 PASSED                     [ 40%]
+main.py::test_find_pets_by_tags_success PASSED                           [ 44%][Test findByTags] Waiting 2.0s after creating pet 1745878748083 with tag unique-tag-1745878743...
+[Test findByTags] Search attempt 1/3 for tag unique-tag-1745878743
+[Test findByTags] Retrying search in 2 seconds...
+[Test findByTags] Search attempt 2/3 for tag unique-tag-1745878743
+[Test findByTags] Found pet with tag unique-tag-1745878743
+
+main.py::test_find_pets_by_tags_no_tag_400 PASSED                        [ 48%]
+main.py::test_get_pet_by_id_success 
+[Fixture] Created pet ID: 1745878753200
+[Fixture] Waiting 2.5s for consistency...
+[Fixture] Wait finished.
+PASSED                               [ 52%]
+[Test] Getting pet ID: 1745878753200
+[Test] Final GET response status: 200
+[Fixture] Cleaning up pet ID: 1745878753200
+[Fixture] Unexpected status N/A getting pet 1745878753200 before cleanup.
+
+main.py::test_get_pet_by_id_not_found_404 PASSED                         [ 56%]
+main.py::test_get_pet_by_id_invalid_id_400 PASSED                        [ 60%]
+main.py::test_update_pet_form_data_error_400 
+[Fixture] Created pet ID: 1745878761109
+[Fixture] Waiting 2.5s for consistency...
+[Fixture] Wait finished.
+PASSED                      [ 64%][Fixture] Cleaning up pet ID: 1745878761109
+[Fixture] Unexpected status N/A getting pet 1745878761109 before cleanup.
+
+main.py::test_delete_pet_success_check_404 
+[Fixture] Created pet ID: 1745878767542
+[Fixture] Waiting 2.5s for consistency...
+[Fixture] Wait finished.
+FAILED                        [ 68%]
+[Test] Verifying delete for pet ID: 1745878767542
+[Test] GET after delete failed (200), retrying ONCE after 2s...
+[Test] Final GET after delete status: 200
+
+main.py:385 (test_delete_pet_success_check_404)
+200 != 404
+
+Expected :404
+Actual   :200
+<Click to see difference>
+
+created_pet = 1745878767542
+
+    def test_delete_pet_success_check_404(created_pet):
+        """DELETE /pet/{petId}: Проверка удаления (фикстурой) и проверка (404)."""
+        pet_id = created_pet
+        headers = {'accept': 'application/json'}
+        # Фикстура уже выполнила DELETE и записала результат. Проверяем GET.
+        print(f"\n[Test] Verifying delete for pet ID: {pet_id}")
+        response = make_request_with_retry("get", f"{BASE_URL}/pet/{pet_id}", headers=headers)
+    
+        # Доп попытка если не 404
+        if response and response.status_code != 404:
+            print(f"[Test] GET after delete failed ({response.status_code}), retrying ONCE after {RETRY_DELAY}s...")
+            time.sleep(RETRY_DELAY)
+            response = make_request_with_retry("get", f"{BASE_URL}/pet/{pet_id}", headers=headers)
+    
+        print(f"[Test] Final GET after delete status: {response.status_code if response else 'N/A'}")
+        assert response is not None, "Request failed after retries"
+        coverage.record_test_result("GET /pet/{petId}", response.status_code)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200]>.status_code
+
+main.py:403: AssertionError
+[Fixture] Cleaning up pet ID: 1745878767542
+[Fixture] Delete response: 200
+
+main.py::test_delete_pet_not_found_actual_200 PASSED                     [ 72%]
+main.py::test_delete_pet_invalid_id_400 PASSED                           [ 76%]
+main.py::test_upload_image_actual_error_415 
+[Fixture] Created pet ID: 1745878780035
+[Fixture] Waiting 2.5s for consistency...
+[Fixture] Wait finished.
+SKIPPED (Skipping upload
+image test: Pet 1745878780035 not found (status N/A) before upload.)     [ 80%]
+Skipped: Skipping upload image test: Pet 1745878780035 not found (status N/A) before upload.
+[Fixture] Cleaning up pet ID: 1745878780035
+[Fixture] Unexpected status N/A getting pet 1745878780035 before cleanup.
+
+main.py::test_upload_image_unsupported_media_type_415 
+[Fixture] Created pet ID: 1745878784988
+[Fixture] Waiting 2.5s for consistency...
+[Fixture] Wait finished.
+PASSED             [ 84%][Fixture] Cleaning up pet ID: 1745878784988
+[Fixture] Unexpected status N/A getting pet 1745878784988 before cleanup.
+
+main.py::test_upload_image_pet_not_found_actual_error_415 PASSED         [ 88%]
+main.py::test_upload_image_invalid_petid_actual_error_415 PASSED         [ 92%]
+main.py::test_pet_crud_e2e FAILED                                        [ 96%]
+E2E: Attempting create with ID 1745878798769
+E2E: Создан питомец с ID 1745878798769
+E2E: Waiting 2.5s after create...
+E2E: Attempting GET for ID 1745878798769
+E2E: Питомец 1745878798769 успешно прочитан.
+E2E: Attempting PUT for ID 1745878798769
+E2E: Attempting DELETE for ID 1745878798769
+E2E: Запрос на удаление питомца 1745878798769 отправлен (статус 200).
+E2E: Attempting GET after delete for ID 1745878798769
+E2E: Запрос GET после удаления 1745878798769 не удался после ретраев.
+
+main.py:506 (test_pet_crud_e2e)
+pet_data = {'category': {'id': 100, 'name': 'Dogs'}, 'id': 1745878713357, 'name': 'TestPet_1745878713357', 'photoUrls': ['http://example.com/photo_1745878713357.jpg'], ...}
+
+    def test_pet_crud_e2e(pet_data):
+        """Полный цикл CRUD операций для питомца."""
+        headers_json = {'Content-Type': 'application/json', 'accept': 'application/json'}
+        headers_accept = {'accept': 'application/json'}
+        e2e_pet_data = pet_data.copy()
+        e2e_pet_data["id"] = int(time.time() * 1000) + random.randint(5001, 6000)
+        initial_pet_id = e2e_pet_data["id"]
+        created_pet_id = initial_pet_id # Изначально ID берем сгенерированный
+    
+        try:
+            # 1. Создание (POST /pet)
+            print(f"\nE2E: Attempting create with ID {initial_pet_id}")
+            create_response = make_request_with_retry("post", f"{BASE_URL}/pet", json=e2e_pet_data, headers=headers_json)
+            assert create_response and create_response.status_code == 200, f"E2E Ошибка создания: {create_response.status_code if create_response else 'N/A'} {create_response.text if create_response else 'No response'}"
+            coverage.record_test_result("POST /pet", create_response.status_code)
+            created_pet_id = create_response.json().get("id", initial_pet_id) # Используем ID из ответа
+            print(f"E2E: Создан питомец с ID {created_pet_id}")
+            print("E2E: Waiting 2.5s after create...")
+            time.sleep(2.5) # <<<--- Увеличена пауза --->>>
+    
+            # 2. Чтение (GET /pet/{petId})
+            print(f"E2E: Attempting GET for ID {created_pet_id}")
+            get_response = make_request_with_retry("get", f"{BASE_URL}/pet/{created_pet_id}", headers=headers_accept)
+            assert get_response and get_response.status_code == 200, f"E2E Ошибка чтения после создания: {get_response.status_code if get_response else 'N/A'} {get_response.text if get_response else 'No response'}"
+            coverage.record_test_result("GET /pet/{petId}", get_response.status_code)
+            assert get_response.json()["name"] == e2e_pet_data["name"]
+            print(f"E2E: Питомец {created_pet_id} успешно прочитан.")
+    
+            # 3. Обновление (PUT /pet)
+            print(f"E2E: Attempting PUT for ID {created_pet_id}")
+            updated_data = e2e_pet_data.copy()
+            updated_data["id"] = created_pet_id
+            updated_data["name"] = f"UpdatedE2E_{created_pet_id}"
+            updated_data["status"] = "sold"
+            put_response = make_request_with_retry("put", f"{BASE_URL}/pet", json=updated_data, headers=headers_json)
+>           assert put_response and put_response.status_code == 200, f"E2E Ошибка обновления: {put_response.status_code if put_response else 'N/A'} {put_response.text if put_response else 'No response'}"
+E           AssertionError: E2E Ошибка обновления: N/A No response
+E           assert (<Response [404]>)
+
+main.py:542: AssertionError
+
+main.py::test_get_pet_by_status_long_string PASSED                       [100%]
+==================================================
+               API COVERAGE REPORT                
+==================================================
+
+1. Среднее покрытие эндпоинтов раздела Pet: 75.0%
+2. Покрытие статус-кодов раздела Pet: 71.4%
+3. Полностью покрытые эндпоинты API: 21.1%
+4. Общее покрытие статус-кодов API: 33.3%
+
+Детали по endpoint'ам:
+PUT /pet: 2/4 (50.0%) ------> ['200', '404'] / ['200', '400', '404', '422']
+POST /pet: 2/3 (66.7%) ------> ['200', '400'] / ['200', '400', '422']
+GET /pet/findByStatus: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+GET /pet/findByTags: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+GET /pet/{petId}: 3/3 (100.0%) ------> ['200', '404', '400'] / ['200', '400', '404']
+POST /pet/{petId}: 1/2 (50.0%) ------> ['400'] / ['200', '400']
+DELETE /pet/{petId}: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+POST /pet/{petId}/uploadImage: 1/3 (33.3%) ------> ['415'] / ['200', '400', '404']
+GET /store/inventory: 0/1 (0.0%) ------> [] / ['200']
+POST /store/order: 0/3 (0.0%) ------> [] / ['200', '400', '422']
+GET /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+POST /user: 0/1 (0.0%) ------> [] / ['200']
+POST /user/createWithList: 0/1 (0.0%) ------> [] / ['200']
+GET /user/login: 0/2 (0.0%) ------> [] / ['200', '400']
+GET /user/logout: 0/1 (0.0%) ------> [] / ['200']
+GET /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+PUT /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+
+
+============== 2 failed, 21 passed, 2 skipped in 90.59s (0:01:30) ==============
+
+Process finished with exit code 1
