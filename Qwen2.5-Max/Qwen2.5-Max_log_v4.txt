@@ -1,0 +1,131 @@
+============================= test session starts ==============================
+collecting ... collected 16 items
+
+main.py::test_update_pet PASSED                                          [  6%]
+main.py::test_update_pet_invalid_data PASSED                             [ 12%]
+main.py::test_create_pet PASSED                                          [ 18%]
+main.py::test_create_pet_invalid_data PASSED                             [ 25%]
+main.py::test_find_pets_by_status PASSED                                 [ 31%]
+main.py::test_find_pets_by_status_invalid PASSED                         [ 37%]
+main.py::test_find_pets_by_tags PASSED                                   [ 43%]
+main.py::test_find_pets_by_tags_invalid FAILED                           [ 50%]
+main.py:73 (test_find_pets_by_tags_invalid)
+200 != 400
+
+Expected :400
+Actual   :200
+<Click to see difference>
+
+@pytest.mark.pet
+    def test_find_pets_by_tags_invalid():
+        """GET /pet/findByTags: Поиск питомцев с невалидными тегами"""
+        params = {"tags": "invalid_tag"}
+>       make_request("GET", "/pet/findByTags", 400, params=params)
+
+main.py:78:
+
+main.py::test_get_pet_by_id PASSED                                       [ 56%]
+main.py::test_get_pet_by_invalid_id PASSED                               [ 62%]
+main.py::test_update_pet_with_form FAILED                                [ 68%]
+main.py:91 (test_update_pet_with_form)
+400 != 405
+
+Expected :405
+Actual   :400
+<Click to see difference>
+
+@pytest.mark.pet
+    def test_update_pet_with_form():
+        """POST /pet/{petId}: Обновление питомца через форму"""
+        pet_id = 1
+        data = {"name": "FormUpdatedPet", "status": "sold"}
+>       make_request("POST", f"/pet/{pet_id}", 405, data=data)  # Корректный статус-код
+
+main.py:97:
+
+main.py::test_delete_pet PASSED                                          [ 75%]
+main.py::test_delete_pet_invalid_id FAILED                               [ 81%]
+main.py:104 (test_delete_pet_invalid_id)
+200 != 404
+
+Expected :404
+Actual   :200
+<Click to see difference>
+
+@pytest.mark.pet
+    def test_delete_pet_invalid_id():
+        """DELETE /pet/{petId}: Удаление питомца с невалидным ID"""
+        invalid_pet_id = 999999
+>       make_request("DELETE", f"/pet/{invalid_pet_id}", 404)
+
+main.py:109:
+
+main.py::test_upload_pet_image FAILED                                    [ 87%]
+main.py:110 (test_upload_pet_image)
+415 != 200
+
+Expected :200
+Actual   :415
+<Click to see difference>
+
+@pytest.mark.pet
+    def test_upload_pet_image():
+        """POST /pet/{petId}/uploadImage: Загрузка изображения питомца"""
+        pet_id = 1
+        files = {"file": ("test.jpg", b"fake image data", "image/jpeg")}
+>       make_request("POST", f"/pet/{pet_id}/uploadImage", 200, files=files)
+
+main.py:116:
+
+main.py::test_upload_pet_image_invalid_id FAILED                         [ 93%]
+main.py:117 (test_upload_pet_image_invalid_id)
+415 != 404
+
+Expected :404
+Actual   :415
+<Click to see difference>
+
+@pytest.mark.pet
+    def test_upload_pet_image_invalid_id():
+        """POST /pet/{petId}/uploadImage: Загрузка изображения с невалидным ID"""
+        invalid_pet_id = 999999
+        files = {"file": ("test.jpg", b"fake image data", "image/jpeg")}
+>       make_request("POST", f"/pet/{invalid_pet_id}/uploadImage", 404, files=files)
+
+main.py:123:
+
+main.py::test_end_to_end_pet_crud PASSED                                 [100%]
+==================================================
+               API COVERAGE REPORT                
+==================================================
+
+1. Среднее покрытие эндпоинтов раздела Pet: 33.3%
+2. Покрытие статус-кодов раздела Pet: 33.3%
+3. Полностью покрытые эндпоинты API: 5.3%
+4. Общее покрытие статус-кодов API: 15.6%
+
+Детали по endpoint'ам:
+PUT /pet: 2/4 (50.0%) ------> ['200', '400'] / ['200', '400', '404', '422']
+POST /pet: 2/3 (66.7%) ------> ['200', '400'] / ['200', '400', '422']
+GET /pet/findByStatus: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+GET /pet/findByTags: 1/2 (50.0%) ------> ['200'] / ['200', '400']
+GET /pet/{petId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+POST /pet/{petId}: 0/2 (0.0%) ------> [] / ['200', '400']
+DELETE /pet/{petId}: 0/2 (0.0%) ------> [] / ['200', '400']
+POST /pet/{petId}/uploadImage: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+GET /store/inventory: 0/1 (0.0%) ------> [] / ['200']
+POST /store/order: 0/3 (0.0%) ------> [] / ['200', '400', '422']
+GET /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+POST /user: 0/1 (0.0%) ------> [] / ['200']
+POST /user/createWithList: 0/1 (0.0%) ------> [] / ['200']
+GET /user/login: 0/2 (0.0%) ------> [] / ['200', '400']
+GET /user/logout: 0/1 (0.0%) ------> [] / ['200']
+GET /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+PUT /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+
+
+======================== 5 failed, 11 passed in 20.98s =========================
+
+Process finished with exit code 1
