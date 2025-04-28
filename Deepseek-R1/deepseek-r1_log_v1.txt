@@ -1,0 +1,184 @@
+============================= test session starts ==============================
+collecting ... collected 15 items
+
+main.py::test_create_pet_valid FAILED                                    [  6%]
+main.py:26 (test_create_pet_valid)
+500 != 200
+
+Expected :200
+Actual   :500
+<Click to see difference>
+
+def test_create_pet_valid():
+        pet_data = {
+            "name": "ValidPet",
+            "photoUrls": ["http://example.com/photo.jpg"],
+            "status": "available"
+        }
+        response = requests.post(f"{BASE_URL}/pet", json=pet_data)
+>       assert response.status_code == 200
+E       assert 500 == 200
+E        +  where 500 = <Response [500]>.status_code
+
+main.py:34: AssertionError
+
+main.py::test_create_pet_invalid FAILED                                  [ 13%]
+main.py:38 (test_create_pet_invalid)
+500 != [400, 405]
+
+Expected :[400, 405]
+Actual   :500
+<Click to see difference>
+
+def test_create_pet_invalid():
+        invalid_data = {"invalidField": "value"}
+        response = requests.post(f"{BASE_URL}/pet", json=invalid_data)
+>       assert response.status_code in [400, 405]
+E       assert 500 in [400, 405]
+E        +  where 500 = <Response [500]>.status_code
+
+main.py:42: AssertionError
+
+main.py::test_update_pet_valid FAILED                                    [ 20%]
+main.py:46 (test_update_pet_valid)
+500 != 200
+
+Expected :200
+Actual   :500
+<Click to see difference>
+
+def test_update_pet_valid():
+>       pet_id = create_pet()
+
+main.py:48:
+
+main.py::test_update_pet_not_found PASSED                                [ 26%]
+main.py::test_get_pet_valid FAILED                                       [ 33%]
+main.py:71 (test_get_pet_valid)
+500 != 200
+
+Expected :200
+Actual   :500
+<Click to see difference>
+
+def test_get_pet_valid():
+>       pet_id = create_pet()
+
+main.py:73:
+
+main.py::test_get_pet_invalid_id PASSED                                  [ 40%]
+main.py::test_get_pet_not_found PASSED                                   [ 46%]
+main.py::test_delete_pet_valid FAILED                                    [ 53%]
+main.py:92 (test_delete_pet_valid)
+500 != 200
+
+Expected :200
+Actual   :500
+<Click to see difference>
+
+def test_delete_pet_valid():
+>       pet_id = create_pet()
+
+main.py:94:
+
+main.py::test_delete_pet_invalid_id PASSED                               [ 60%]
+main.py::test_delete_pet_not_found FAILED                                [ 66%]
+main.py:105 (test_delete_pet_not_found)
+200 != 404
+
+Expected :404
+Actual   :200
+<Click to see difference>
+
+def test_delete_pet_not_found():
+        response = requests.delete(f"{BASE_URL}/pet/999999")
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200]>.status_code
+
+main.py:108: AssertionError
+
+main.py::test_find_by_status_valid PASSED                                [ 73%]
+main.py::test_find_by_status_invalid PASSED                              [ 80%]
+main.py::test_upload_image_valid FAILED                                  [ 86%]
+main.py:125 (test_upload_image_valid)
+500 != 200
+
+Expected :200
+Actual   :500
+<Click to see difference>
+
+def test_upload_image_valid():
+>       pet_id = create_pet()
+
+main.py:127:
+
+main.py::test_upload_image_invalid FAILED                                [ 93%]
+main.py:134 (test_upload_image_invalid)
+500 != 200
+
+Expected :200
+Actual   :500
+<Click to see difference>
+
+def test_upload_image_invalid():
+>       pet_id = create_pet()
+
+main.py:136:
+
+main.py::test_pet_crud_flow FAILED                                       [100%]
+main.py:144 (test_pet_crud_flow)
+500 != 200
+
+Expected :200
+Actual   :500
+<Click to see difference>
+
+def test_pet_crud_flow():
+        # Create
+        pet_data = {
+            "name": "CRUDPet",
+            "photoUrls": ["http://example.com/photo.jpg"],
+            "status": "available"
+        }
+        create_resp = requests.post(f"{BASE_URL}/pet", json=pet_data)
+>       assert create_resp.status_code == 200
+E       assert 500 == 200
+E        +  where 500 = <Response [500]>.status_code
+
+main.py:153: AssertionError
+
+==================================================
+               API COVERAGE REPORT                
+==================================================
+
+1. Среднее покрытие эндпоинтов раздела Pet: 30.2%
+2. Покрытие статус-кодов раздела Pet: 28.6%
+3. Полностью покрытые эндпоинты API: 5.3%
+4. Общее покрытие статус-кодов API: 13.3%
+
+Детали по endpoint'ам:
+PUT /pet: 1/4 (25.0%) ------> ['404'] / ['200', '400', '404', '422']
+POST /pet: 0/3 (0.0%) ------> [] / ['200', '400', '422']
+GET /pet/findByStatus: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+GET /pet/findByTags: 0/2 (0.0%) ------> [] / ['200', '400']
+GET /pet/{petId}: 2/3 (66.7%) ------> ['400', '404'] / ['200', '400', '404']
+POST /pet/{petId}: 0/2 (0.0%) ------> [] / ['200', '400']
+DELETE /pet/{petId}: 1/2 (50.0%) ------> ['400'] / ['200', '400']
+POST /pet/{petId}/uploadImage: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+GET /store/inventory: 0/1 (0.0%) ------> [] / ['200']
+POST /store/order: 0/3 (0.0%) ------> [] / ['200', '400', '422']
+GET /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+POST /user: 0/1 (0.0%) ------> [] / ['200']
+POST /user/createWithList: 0/1 (0.0%) ------> [] / ['200']
+GET /user/login: 0/2 (0.0%) ------> [] / ['200', '400']
+GET /user/logout: 0/1 (0.0%) ------> [] / ['200']
+GET /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+PUT /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+
+
+========================= 9 failed, 6 passed in 24.40s =========================
+
+Process finished with exit code 1
