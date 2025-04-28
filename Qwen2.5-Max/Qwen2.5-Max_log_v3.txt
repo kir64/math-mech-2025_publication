@@ -1,0 +1,61 @@
+============================= test session starts ==============================
+collecting ... collected 13 items
+
+main.py::test_update_pet PASSED                                          [  7%]
+main.py::test_create_pet PASSED                                          [ 15%]
+main.py::test_find_pets_by_status PASSED                                 [ 23%]
+main.py::test_find_pets_by_tags PASSED                                   [ 30%]
+main.py::test_get_pet_by_id PASSED                                       [ 38%]
+main.py::test_update_pet_with_form PASSED                                [ 46%]
+main.py::test_delete_pet PASSED                                          [ 53%]
+main.py::test_upload_pet_image FAILED                                    [ 61%]
+main.py:66 (test_upload_pet_image)
+@pytest.mark.pet
+    def test_upload_pet_image():
+        """POST /pet/{petId}/uploadImage: Загрузка изображения питомца"""
+        pet_id = 1
+        # Убедитесь, что файл test.jpg существует в рабочей директории
+>       files = {"file": ("test.jpg", open("test.jpg", "rb"), "image/jpeg")}
+E       FileNotFoundError: [Errno 2] No such file or directory: 'test.jpg'
+
+main.py:72: FileNotFoundError
+
+main.py::test_end_to_end_pet_crud PASSED                                 [ 69%]
+main.py::test_invalid_pet_id PASSED                                      [ 76%]
+main.py::test_invalid_pet_data PASSED                                    [ 84%]
+main.py::test_invalid_status_for_find_by_status PASSED                   [ 92%]
+main.py::test_invalid_tags_for_find_by_tags PASSED                       [100%]
+==================================================
+               API COVERAGE REPORT                
+==================================================
+
+1. Среднее покрытие эндпоинтов раздела Pet: 30.2%
+2. Покрытие статус-кодов раздела Pet: 28.6%
+3. Полностью покрытые эндпоинты API: 5.3%
+4. Общее покрытие статус-кодов API: 13.3%
+
+Детали по endpoint'ам:
+PUT /pet: 1/4 (25.0%) ------> ['200'] / ['200', '400', '404', '422']
+POST /pet: 2/3 (66.7%) ------> ['200', '400'] / ['200', '400', '422']
+GET /pet/findByStatus: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+GET /pet/findByTags: 1/2 (50.0%) ------> ['200'] / ['200', '400']
+GET /pet/{petId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+POST /pet/{petId}: 0/2 (0.0%) ------> [] / ['200', '400']
+DELETE /pet/{petId}: 0/2 (0.0%) ------> [] / ['200', '400']
+POST /pet/{petId}/uploadImage: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+GET /store/inventory: 0/1 (0.0%) ------> [] / ['200']
+POST /store/order: 0/3 (0.0%) ------> [] / ['200', '400', '422']
+GET /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+POST /user: 0/1 (0.0%) ------> [] / ['200']
+POST /user/createWithList: 0/1 (0.0%) ------> [] / ['200']
+GET /user/login: 0/2 (0.0%) ------> [] / ['200', '400']
+GET /user/logout: 0/1 (0.0%) ------> [] / ['200']
+GET /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+PUT /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+
+
+======================== 1 failed, 12 passed in 17.08s =========================
+
+Process finished with exit code 1
