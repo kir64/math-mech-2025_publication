@@ -162,4 +162,26 @@ def test_full_lifecycle():
         time.sleep(1)
     assert verify_resp.status_code == 404
 
-# Фикстура для отчетности (без изменений)
+# Фикстура для отчетности
+@pytest.fixture(scope="session", autouse=True)
+def print_coverage_report(request):
+    def finalizer():
+        metrics = coverage.calculate_metrics()
+
+        print("\n" + "=" * 50)
+        print("           API COVERAGE REPORT")
+        print("=" * 50 + "\n")
+
+        print(f"1. Pet endpoints coverage: {metrics['avg_endpoint_coverage']:.1f}%")
+        print(f"2. Pet status codes coverage: {metrics['pet_status_coverage']:.1f}%")
+        print(f"3. Fully covered endpoints: {metrics['full_endpoint_coverage']:.1f}%")
+        print(f"4. Total API coverage: {metrics['total_api_coverage']:.1f}%\n")
+
+        print("Endpoint details:")
+        for endpoint in sorted(coverage.coverage_data):
+            data = coverage.coverage_data[endpoint]
+            tested = len(data["tested"])
+            total = len(data["status_codes"])
+            print(f"{endpoint}: {tested}/{total} ({tested / total * 100:.1f}%)")
+
+    request.addfinalizer(finalizer)
