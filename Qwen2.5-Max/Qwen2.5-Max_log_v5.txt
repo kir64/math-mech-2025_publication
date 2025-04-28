@@ -1,0 +1,53 @@
+============================= test session starts ==============================
+collecting ... collected 16 items
+
+main.py::test_update_pet PASSED                                          [  6%]
+main.py::test_update_pet_invalid_data PASSED                             [ 12%]
+main.py::test_create_pet PASSED                                          [ 18%]
+main.py::test_create_pet_invalid_data PASSED                             [ 25%]
+main.py::test_find_pets_by_status PASSED                                 [ 31%]
+main.py::test_find_pets_by_status_invalid PASSED                         [ 37%]
+main.py::test_find_pets_by_tags PASSED                                   [ 43%]
+main.py::test_find_pets_by_tags_invalid PASSED                           [ 50%]
+main.py::test_get_pet_by_id PASSED                                       [ 56%]
+main.py::test_get_pet_by_invalid_id PASSED                               [ 62%]
+main.py::test_update_pet_with_form PASSED                                [ 68%]
+main.py::test_delete_pet PASSED                                          [ 75%]
+main.py::test_delete_pet_invalid_id PASSED                               [ 81%]
+main.py::test_upload_pet_image PASSED                                    [ 87%]
+main.py::test_upload_pet_image_invalid_id PASSED                         [ 93%]
+main.py::test_end_to_end_pet_crud PASSED                                 [100%]
+==================================================
+               API COVERAGE REPORT                
+==================================================
+
+1. Среднее покрытие эндпоинтов раздела Pet: 33.3%
+2. Покрытие статус-кодов раздела Pet: 33.3%
+3. Полностью покрытые эндпоинты API: 5.3%
+4. Общее покрытие статус-кодов API: 15.6%
+
+Детали по endpoint'ам:
+PUT /pet: 2/4 (50.0%) ------> ['200', '400'] / ['200', '400', '404', '422']
+POST /pet: 2/3 (66.7%) ------> ['200', '400'] / ['200', '400', '422']
+GET /pet/findByStatus: 2/2 (100.0%) ------> ['200', '400'] / ['200', '400']
+GET /pet/findByTags: 1/2 (50.0%) ------> ['200'] / ['200', '400']
+GET /pet/{petId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+POST /pet/{petId}: 0/2 (0.0%) ------> [] / ['200', '400']
+DELETE /pet/{petId}: 0/2 (0.0%) ------> [] / ['200', '400']
+POST /pet/{petId}/uploadImage: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+GET /store/inventory: 0/1 (0.0%) ------> [] / ['200']
+POST /store/order: 0/3 (0.0%) ------> [] / ['200', '400', '422']
+GET /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /store/order/{orderId}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+POST /user: 0/1 (0.0%) ------> [] / ['200']
+POST /user/createWithList: 0/1 (0.0%) ------> [] / ['200']
+GET /user/login: 0/2 (0.0%) ------> [] / ['200', '400']
+GET /user/logout: 0/1 (0.0%) ------> [] / ['200']
+GET /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+PUT /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+DELETE /user/{username}: 0/3 (0.0%) ------> [] / ['200', '400', '404']
+
+
+============================= 16 passed in 22.94s ==============================
+
+Process finished with exit code 0
