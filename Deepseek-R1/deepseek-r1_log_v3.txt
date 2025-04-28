@@ -31,7 +31,7 @@ Expected :[200, 204]
 Actual   :404
 <Click to see difference>
 
-test_pet = 1745799730
+test_pet = 1745799988
 
     def test_put_pet_success(test_pet):
         update_data = {
@@ -64,7 +64,7 @@ Expected :[200, 201]
 Actual   :415
 <Click to see difference>
 
-test_pet = 1745799755
+test_pet = 1745800017
 
     def test_upload_image_success(test_pet):
         files = {'file': ('image.jpg', b'content', 'image/jpeg')}
@@ -102,7 +102,37 @@ E        +  where 500 = <Response [500]>.status_code
 
 main.py:142: AssertionError
 
+==================================================
+           API COVERAGE REPORT
+==================================================
 
-========================= 4 failed, 9 passed in 38.97s =========================
+1. Pet endpoints coverage: 38.5%
+2. Pet status codes coverage: 38.1%
+3. Fully covered endpoints: 10.5%
+4. Total API coverage: 17.8%
+
+Endpoint details:
+DELETE /pet/{petId}: 1/2 (50.0%)
+DELETE /store/order/{orderId}: 0/3 (0.0%)
+DELETE /user/{username}: 0/3 (0.0%)
+GET /pet/findByStatus: 2/2 (100.0%)
+GET /pet/findByTags: 0/2 (0.0%)
+GET /pet/{petId}: 3/3 (100.0%)
+GET /store/inventory: 0/1 (0.0%)
+GET /store/order/{orderId}: 0/3 (0.0%)
+GET /user/login: 0/2 (0.0%)
+GET /user/logout: 0/1 (0.0%)
+GET /user/{username}: 0/3 (0.0%)
+POST /pet: 1/3 (33.3%)
+POST /pet/{petId}: 0/2 (0.0%)
+POST /pet/{petId}/uploadImage: 0/3 (0.0%)
+POST /store/order: 0/3 (0.0%)
+POST /user: 0/1 (0.0%)
+POST /user/createWithList: 0/1 (0.0%)
+PUT /pet: 1/4 (25.0%)
+PUT /user/{username}: 0/3 (0.0%)
+
+
+========================= 4 failed, 9 passed in 42.48s =========================
 
 Process finished with exit code 1
